@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PadelLand Receipt</title>
+    <style>
+        :root {
+            --primary-color: #000000;
+            --accent-color: #b1d234; /* Matched from logo */
+            --text-main: #333333;
+            --text-muted: #666666;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            line-height: 1.5;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .receipt-container {
+            max-width: 210mm; /* A4 width */
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .logo-placeholder {
+            width: 140px;
+            height: 140px;
+            background-color: #fafafa;
+            border: 2px dashed #cccccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            padding: 10px;
+        }
+
+        .business-info {
+            text-align: right;
+        }
+
+        .business-info h1 {
+            margin: 0 0 5px 0;
+            font-size: 28px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .business-info p {
+            margin: 4px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        hr.divider {
+            border: 0;
+            border-top: 2px solid var(--primary-color);
+            margin: 0 0 30px 0;
+        }
+
+        /* Middle Section */
+        .receipt-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        .details-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 35px;
+        }
+
+        .details-box {
+            width: 48%;
+        }
+
+        .details-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 120px;
+            color: var(--primary-color);
+        }
+
+        .value {
+            color: var(--text-main);
+        }
+
+        /* Table Section */
+        .billing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .billing-table th, 
+        .billing-table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .billing-table th {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .billing-table td {
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+        }
+
+        .billing-table th.amount-col, 
+        .billing-table td.amount-col {
+            text-align: right;
+            width: 150px;
+        }
+
+        /* Totals Section */
+        .totals-section {
+            width: 40%;
+            margin-left: auto;
+            margin-bottom: 40px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            font-size: 15px;
+        }
+
+        .total-row.subtotal {
+            border-bottom: 1px solid #eeeeee;
+            color: var(--text-muted);
+        }
+
+        .total-row.grand-total {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--primary-color);
+            background-color: rgba(177, 210, 52, 0.15); /* Light accent background */
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .thank-you {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .system-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Print Styles */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                background: none;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .receipt-container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                padding: 20mm;
+            }
+            .logo-placeholder {
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="receipt-container">
+    <header>
+        <div class="logo-placeholder">
+            <span><img src="images.jfif" alt=""></span>
+        </div>
+        <div class="business-info">
+            <h1>PadelLand</h1>
+            <p>Your Address Here, City</p>
+            <p>Phone: +92 300 0000000</p>
+            <p>Email: info@padelland.com</p>
+        </div>
+    </header>
+
+    <hr class="divider">
+
+    <div class="receipt-title">Receipt</div>
+
+    <div class="details-section">
+        <div class="details-box">
+            <div class="details-row">
+                <span class="label">Customer:</span>
+                <span class="value">Hassan Siddiqui</span>
+            </div>
+            <div class="details-row">
+                <span class="label">Booking Date:</span>
+                <span class="value">19 April (Sunday)</span>
+            </div>
+            <div class="details-row">
+                <span class="label">Time:</span>
+                <span class="value">8:00 PM &ndash; 9:00 PM</span>
+            </div>
+        </div>
+        <div class="details-box">
+            <div class="details-row">
+                <span class="label">Receipt No:</span>
+                <span class="value">#PL-001</span>
+            </div>
+            <div class="details-row">
+                <span class="label">Issue Date:</span>
+                <span class="value">19 April</span>
+            </div>
+        </div>
+    </div>
+
+    <table class="billing-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th class="amount-col">Amount (PKR)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Padel Court Booking</td>
+                <td>1 hour session</td>
+                <td class="amount-col">Rs. 4000</td>
+            </tr>
+            <tr>
+                <td>Canteen Items</td>
+                <td>Gatorade & Water</td>
+                <td class="amount-col">Rs. 790</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="totals-section">
+        <div class="total-row subtotal">
+            <span>Subtotal</span>
+            <span>Rs. 4790</span>
+        </div>
+        <div class="total-row grand-total">
+            <span>Total Amount</span>
+            <span>Rs. 4790</span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="thank-you">Thank you for choosing PadelLand!</div>
+        <div class="system-note">This is a computer-generated receipt and requires no signature.</div>
+    </footer>
+</div>
+
+</body>
+</html>

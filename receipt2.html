@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PadelLand • Receipt</title>
+  <!-- Clean, modern font (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    /* RESET & BASE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7fa;   /* subtle background for screen, removed in print */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      color: #1e1e2a;
+    }
+
+    /* RECEIPT CARD – clean, white, A4 friendly */
+    .receipt {
+      max-width: 880px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.02);
+      padding: 36px 40px 40px;
+      transition: all 0.2s;
+      border: 1px solid #e9edf2;
+    }
+
+    /* HEADER — logo left, business details right */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-placeholder {
+      height: 64px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      /* clean fallback if image missing */
+      background: transparent;
+    }
+
+    .business-details {
+      text-align: right;
+    }
+
+    .business-details h1 {
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -0.01em;
+      color: #0b2b1e;        /* deep sporty green, subtle */
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .business-details p {
+      font-size: 15px;
+      color: #3e4a5e;
+      line-height: 1.5;
+      margin: 2px 0;
+      font-weight: 400;
+    }
+
+    .divider {
+      border: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #cbd5e1 0%, #94a3b8 50%, #cbd5e1 100%);
+      margin: 20px 0 28px;
+      opacity: 0.5;
+    }
+
+    /* Receipt title */
+    .receipt-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 34px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #1a2e2a;
+      margin-bottom: 20px;
+    }
+
+    /* Meta row (receipt no & issue date) */
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      background: #f8fafc;
+      padding: 12px 20px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      font-size: 15px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .receipt-num {
+      font-weight: 600;
+      color: #0f3d2e;
+    }
+
+    .issue-date {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    /* Customer + booking detail block */
+    .booking-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px 48px;
+      background: white;
+      padding: 8px 0 16px;
+      border-bottom: 1px dashed #cfdde9;
+      margin-bottom: 28px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 600;
+      color: #54708f;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      font-size: 18px;
+      color: #0f1e2c;
+    }
+
+    .detail-value small {
+      font-weight: 400;
+      font-size: 15px;
+      color: #4a627a;
+      margin-left: 6px;
+    }
+
+    /* Billing table — clean, minimal */
+    .billing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 10px;
+      font-size: 16px;
+    }
+
+    .billing-table th {
+      text-align: left;
+      padding: 14px 10px 10px 0;
+      font-weight: 600;
+      color: #1e3a5f;
+      border-bottom: 2px solid #bdc9d6;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .billing-table td {
+      padding: 14px 10px 14px 0;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    .billing-table tr:last-child td {
+      border-bottom: none;  /* for tfoot we handle separately */
+    }
+
+    .billing-table th:last-child,
+    .billing-table td:last-child {
+      text-align: right;
+      padding-right: 5px;
+    }
+
+    .billing-table th:first-child,
+    .billing-table td:first-child {
+      padding-left: 0;
+    }
+
+    /* amount column right-aligned */
+    .amount-col {
+      text-align: right;
+    }
+
+    /* subtotal / total rows */
+    .tfoot-row td {
+      border-bottom: none;
+      padding-top: 18px;
+    }
+
+    .subtotal-row td {
+      border-bottom: none;
+      font-size: 16px;
+    }
+
+    .total-row td {
+      font-weight: 700;
+      font-size: 18px;
+      border-top: 2px solid #1e2f3d;
+      padding-top: 16px;
+    }
+
+    /* footer */
+    .footer-note {
+      margin-top: 40px;
+      text-align: center;
+      border-top: 1px solid #d7e0e8;
+      padding-top: 28px;
+    }
+
+    .thankyou {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1b3b2c;
+      margin-bottom: 8px;
+    }
+
+    .generated {
+      font-size: 13px;
+      color: #6f7e91;
+      letter-spacing: 0.2px;
+    }
+
+    /* utility */
+    .text-right {
+      text-align: right;
+    }
+
+    .fw-600 {
+      font-weight: 600;
+    }
+
+    /* PRINT STYLES — A4 optimised, clean */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+        display: block;
+      }
+
+      .receipt {
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+        padding: 0.75in 0.6in;
+        max-width: 100%;
+        background: white;
+        margin: 0 auto;
+      }
+
+      .divider {
+        background: #aaa;
+        height: 1.5px;
+      }
+
+      .meta-row {
+        background: none;
+        border: 1px solid #ccc;
+      }
+
+      .billing-table th {
+        border-bottom: 2px solid #222;
+        color: black;
+      }
+
+      .billing-table td {
+        border-bottom: 1px solid #aaa;
+      }
+
+      .total-row td {
+        border-top: 2px solid black;
+      }
+
+      .footer-note {
+        border-top: 1px solid #888;
+      }
+
+      /* ensure logo prints well */
+      .logo-placeholder {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* no backgrounds */
+      .business-details h1,
+      .detail-value {
+        color: black;
+      }
+
+      @page {
+        size: A4;
+        margin: 0.4in;
+      }
+    }
+
+    /* small screen adjustments */
+    @media (max-width: 550px) {
+      .receipt {
+        padding: 24px 18px;
+      }
+
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .business-details {
+        text-align: left;
+        width: 100%;
+      }
+
+      .booking-details {
+        gap: 16px;
+      }
+    }
+
+    /* extra polish */
+    .accent-text {
+      color: #0f5132;
+    }
+
+    .currency-symbol {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <!-- HEADER: Logo (left) + Business details (right) -->
+    <div class="header-row">
+      <div class="logo-area">
+        <!-- Logo placeholder — replace "logo.png" with actual file name.
+             The user will add the logo manually. -->
+        <img src="images.jfif" alt="PadelLand Logo" class="logo-placeholder">
+      </div>
+      <div class="business-details">
+        <h1>PadelLand</h1>
+        <p>Your Address Here</p>
+        <p>Phone: +92 300 1234567</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- RECEIPT TITLE -->
+    <div class="receipt-title">RECEIPT</div>
+
+    <!-- Receipt number & issue date (extra) -->
+    <div class="meta-row">
+      <span class="receipt-num">🧾 Receipt #PL-001</span>
+      <span class="issue-date">📅 Issue Date: 19 April 2025</span>
+    </div>
+
+    <!-- Customer & booking info -->
+    <div class="booking-details">
+      <div class="detail-item">
+        <span class="detail-label">Customer</span>
+        <span class="detail-value">Hassan Siddiqui</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Date</span>
+        <span class="detail-value">19 April <small>(Sunday)</small></span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Time</span>
+        <span class="detail-value">8:00 PM – 9:00 PM</span>
+      </div>
+    </div>
+
+    <!-- BILLING TABLE -->
+    <table class="billing-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Description</th>
+          <th>Amount (PKR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Padel Court Booking</strong></td>
+          <td>1 hour session</td>
+          <td class="amount-col">Rs. 4,000</td>
+        </tr>
+        <tr>
+          <td><strong>Canteen Items</strong></td>
+          <td>Gatorade & Water</td>
+          <td class="amount-col">Rs. 790</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <!-- Subtotal row -->
+        <tr class="subtotal-row">
+          <td colspan="2" style="text-align: right; font-weight: 500;">Subtotal</td>
+          <td class="amount-col" style="font-weight: 500;">Rs. 4,790</td>
+        </tr>
+        <!-- Total row (bold) -->
+        <tr class="total-row">
+          <td colspan="2" style="text-align: right; font-weight: 700;">Total Amount</td>
+          <td class="amount-col" style="font-weight: 700;">Rs. 4,790</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- FOOTER -->
+    <div class="footer-note">
+      <div class="thankyou">🎾 Thank you for choosing PadelLand!</div>
+      <div class="generated">This is a computer-generated receipt.</div>
+      <div style="margin-top: 12px; font-size: 12px; color: #7e8c9e;">PadelLand — play with passion</div>
+    </div>
+  </div>
+
+  <!-- (Optional) Tiny note: The logo file "logo.png" should be placed in the same directory.
+       Business address/phone placeholders can be edited. -->
+</body>
+</html>
