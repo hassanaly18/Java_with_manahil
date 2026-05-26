@@ -1,311 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PadelLand Receipt</title>
-    <style>
-        :root {
-            --primary-color: #000000;
-            --accent-color: #b1d234; /* Matched from logo */
-            --text-main: #333333;
-            --text-muted: #666666;
-        }
+  <meta charset="UTF-8">
+  <title>The Padel House Receipt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-        * {
-            box-sizing: border-box;
-        }
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: var(--text-main);
-            line-height: 1.5;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 40px 20px;
-        }
+    :root {
+      --ink:    #1a1a2e;
+      --gold:   #c9a84c;
+      --gold-lt:#f0d98a;
+      --bg:     #f8f6f1;
+      --white:  #ffffff;
+      --muted:  #6b6b7a;
+      --rule:   #e0dbd0;
+    }
 
-        .receipt-container {
-            max-width: 210mm; /* A4 width */
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      padding: 40px 20px;
+      color: var(--ink);
+    }
 
-        /* Header Section */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 25px;
-        }
+    /* ── PAGE ── */
+    .receipt {
+      max-width: 760px;
+      margin: auto;
+      background: var(--white);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,.05), 0 20px 60px rgba(0,0,0,.08);
+    }
 
-        .logo-placeholder {
-            width: 140px;
-            height: 140px;
-            background-color: #fafafa;
-            border: 2px dashed #cccccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 12px;
-            padding: 10px;
-        }
+    /* ── TOP BAND ── */
+    .top-band {
+      background: var(--ink);
+      padding: 32px 40px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-        .business-info {
-            text-align: right;
-        }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
 
-        .business-info h1 {
-            margin: 0 0 5px 0;
-            font-size: 28px;
-            color: var(--primary-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    .logo-box {
+      width: 65%;
+      height: 64px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-        .business-info p {
-            margin: 4px 0;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        hr.divider {
-            border: 0;
-            border-top: 2px solid var(--primary-color);
-            margin: 0 0 30px 0;
-        }
+    .logo-placeholder {
+      font-size: 11px;
+      color: rgba(255,255,255,.35);
+      text-align: center;
+      line-height: 1.3;
+      padding: 6px;
+    }
 
-        /* Middle Section */
-        .receipt-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-            color: var(--primary-color);
-        }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
 
-        .details-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 35px;
-        }
+    .brand-tagline {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
 
-        .details-box {
-            width: 48%;
-        }
+    .receipt-badge {
+      text-align: right;
+    }
 
-        .details-row {
-            display: flex;
-            margin-bottom: 8px;
-            font-size: 15px;
-        }
+    .receipt-badge .label {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
 
-        .label {
-            font-weight: bold;
-            width: 120px;
-            color: var(--primary-color);
-        }
+    .receipt-badge .meta {
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,.55);
+      line-height: 1.8;
+    }
 
-        .value {
-            color: var(--text-main);
-        }
+    .receipt-badge .meta strong {
+      color: rgba(255,255,255,.85);
+      font-weight: 500;
+    }
 
-        /* Table Section */
-        .billing-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
+    /* ── GOLD RULE ── */
+    .gold-rule {
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-lt) 50%, var(--gold) 100%);
+    }
 
-        .billing-table th, 
-        .billing-table td {
-            padding: 12px 15px;
-            text-align: left;
-        }
+    /* ── BODY ── */
+    .body {
+      padding: 36px 40px;
+    }
 
-        .billing-table th {
-            background-color: var(--primary-color);
-            color: #ffffff;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
+    /* ── CONTACT STRIP ── */
+    .contact-strip {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 28px;
+    }
 
-        .billing-table td {
-            border-bottom: 1px solid #eeeeee;
-            font-size: 14px;
-        }
+    .contact-strip span::before {
+      content: attr(data-icon);
+      margin-right: 5px;
+      opacity: .6;
+    }
 
-        .billing-table th.amount-col, 
-        .billing-table td.amount-col {
-            text-align: right;
-            width: 150px;
-        }
+    /* ── BILLING ROW ── */
+    .billing-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 32px;
+    }
 
-        /* Totals Section */
-        .totals-section {
-            width: 40%;
-            margin-left: auto;
-            margin-bottom: 40px;
-        }
+    .billing-block h4 {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
 
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 15px;
-            font-size: 15px;
-        }
+    .billing-block p {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.6;
+    }
 
-        .total-row.subtotal {
-            border-bottom: 1px solid #eeeeee;
-            color: var(--text-muted);
-        }
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
 
-        .total-row.grand-total {
-            font-weight: bold;
-            font-size: 18px;
-            color: var(--primary-color);
-            background-color: rgba(177, 210, 52, 0.15); /* Light accent background */
-            border-bottom: 2px solid var(--primary-color);
-        }
+    thead tr {
+      border-bottom: 2px solid var(--ink);
+    }
 
-        /* Footer Section */
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #eeeeee;
-        }
+    thead th {
+      padding: 10px 0;
+      text-align: left;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
 
-        .thank-you {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
+    thead th.r { text-align: right; }
 
-        .system-note {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
+    tbody tr {
+      border-bottom: 1px solid var(--rule);
+      transition: background .15s;
+    }
 
-        /* Print Styles */
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-            body {
-                background: none;
-                padding: 0;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .receipt-container {
-                box-shadow: none;
-                margin: 0;
-                width: 100%;
-                max-width: 100%;
-                padding: 20mm;
-            }
-            .logo-placeholder {
-                border: 1px solid #000;
-            }
-        }
-    </style>
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      padding: 14px 0;
+      color: var(--ink);
+    }
+
+    tbody td.desc {
+      font-weight: 400;
+    }
+
+    tbody td.amt {
+      text-align: right;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── TOTALS ── */
+    .totals-section {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .totals-box {
+      width: 260px;
+    }
+
+    .totals-box .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      font-size: 13px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .totals-box .row.grand {
+      border-bottom: none;
+      border-top: 2px solid var(--ink);
+      padding-top: 12px;
+      margin-top: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* ── THANK YOU ── */
+    .thankyou-strip {
+      margin-top: 36px;
+      background: var(--ink);
+      border-radius: 4px;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .thankyou-strip .msg {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--white);
+      font-style: italic;
+    }
+
+    .thankyou-strip .accent {
+      width: 40px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    /* ── TERMS ── */
+    .terms {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .terms strong {
+      color: var(--ink);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: none; padding: 0; }
+      .receipt { box-shadow: none; }
+    }
+
+    @media (max-width: 600px) {
+      .top-band { flex-direction: column; align-items: flex-start; }
+      .receipt-badge { text-align: left; }
+      .billing-row { flex-direction: column; gap: 16px; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="receipt-container">
-    <header>
-        <div class="logo-placeholder">
-            <span><img src="images.jfif" alt=""></span>
-        </div>
-        <div class="business-info">
-            <h1>PadelLand</h1>
-            <p>Your Address Here, City</p>
-            <p>Phone: +92 300 0000000</p>
-            <p>Email: info@padelland.com</p>
-        </div>
-    </header>
+<div class="receipt">
 
-    <hr class="divider">
-
-    <div class="receipt-title">Receipt</div>
-
-    <div class="details-section">
-        <div class="details-box">
-            <div class="details-row">
-                <span class="label">Customer:</span>
-                <span class="value">Hassan Siddiqui</span>
-            </div>
-            <div class="details-row">
-                <span class="label">Booking Date:</span>
-                <span class="value">19 April (Sunday)</span>
-            </div>
-            <div class="details-row">
-                <span class="label">Time:</span>
-                <span class="value">8:00 PM &ndash; 9:00 PM</span>
-            </div>
-        </div>
-        <div class="details-box">
-            <div class="details-row">
-                <span class="label">Receipt No:</span>
-                <span class="value">#PL-001</span>
-            </div>
-            <div class="details-row">
-                <span class="label">Issue Date:</span>
-                <span class="value">19 April</span>
-            </div>
-        </div>
+  <!-- TOP BAND -->
+  <div class="top-band">
+    <div class="logo-area">
+      <div class="logo-box">
+        <!-- Replace src with your logo path -->
+        <img src="phouse.jfif" alt="The Padel House">
+        <!-- <div class="logo-placeholder">Your<br>Logo</div> -->
+      </div>
+      <div>
+        <div class="brand-name">The Padel House</div>
+        <div class="brand-tagline">Premium Padel Experience</div>
+      </div>
     </div>
 
-    <table class="billing-table">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Description</th>
-                <th class="amount-col">Amount (PKR)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Padel Court Booking</td>
-                <td>1 hour session</td>
-                <td class="amount-col">Rs. 4000</td>
-            </tr>
-            <tr>
-                <td>Canteen Items</td>
-                <td>Gatorade & Water</td>
-                <td class="amount-col">Rs. 790</td>
-            </tr>
-        </tbody>
+    <div class="receipt-badge">
+      <div class="label">Receipt</div>
+      <div class="meta">
+        <strong>Receipt No:</strong> TPH-2026-0001<br>
+        <strong>Issue Date:</strong> 10 May 2026
+      </div>
+    </div>
+  </div>
+
+  <!-- GOLD RULE -->
+  <div class="gold-rule"></div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- CONTACT STRIP — fill in your details -->
+    <div class="contact-strip">
+      <span data-icon="📍"> 9-A, near Gol Chakkar, U.E.T. Housing Society, Lahore.</span>
+      <span data-icon="📞">+923204028902</span>
+      <!-- <span data-icon="✉️">info@thepadelhouse.pk</span> -->
+    </div>
+
+    <!-- BILLING -->
+    <div class="billing-row">
+      <div class="billing-block">
+        <h4>Billed To</h4>
+        <p>Hassan Siddiqui</p>
+      </div>
+      <div class="billing-block" style="text-align:right;">
+        <h4>Booking Details</h4>
+        <p>10 May 2026 (Sunday)<br>9:30 PM – 10:30 PM</p>
+      </div>
+    </div>
+
+    <!-- ITEMS TABLE -->
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th class="r">Amount (PKR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="desc">Padel Court Booking (1 Hour Session)</td>
+          <td class="amt">4,000</td>
+        </tr>
+        <tr>
+          <td class="desc">Canteen Items</td>
+          <td class="amt">540</td>
+        </tr>
+      </tbody>
     </table>
 
+    <!-- TOTALS -->
     <div class="totals-section">
-        <div class="total-row subtotal">
-            <span>Subtotal</span>
-            <span>Rs. 4790</span>
+      <div class="totals-box">
+        <div class="row">
+          <span>Subtotal</span>
+          <span>Rs. 4,540</span>
         </div>
-        <div class="total-row grand-total">
-            <span>Total Amount</span>
-            <span>Rs. 4790</span>
+        <div class="row grand">
+          <span>Total</span>
+          <span>Rs. 4,540</span>
         </div>
+      </div>
     </div>
 
-    <footer>
-        <div class="thank-you">Thank you for choosing PadelLand!</div>
-        <div class="system-note">This is a computer-generated receipt and requires no signature.</div>
-    </footer>
-</div>
+    <!-- THANK YOU -->
+    <div class="thankyou-strip">
+      <div class="accent"></div>
+      <div class="msg">Thank you for playing with us!</div>
+      <div class="accent"></div>
+    </div>
+
+    <!-- TERMS -->
+    <div class="terms">
+      <strong>Terms &amp; Conditions</strong>
+      • Payments are non-refundable once the booking is confirmed.<br>
+      • Please arrive 10 minutes prior to your scheduled time.<br>
+      • Management reserves the right to cancel or reschedule due to unforeseen circumstances.
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /receipt -->
 
 </body>
 </html>
