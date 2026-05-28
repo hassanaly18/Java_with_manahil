@@ -1,4 +1,8 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,10 +33,48 @@ public class Parking {
         }
     }
 
+    public void setParkingSpace(Car car){
+        for (int i = 0; i < parkingSlots.length; i++) {
+            if(parkingSlots[i] == null){
+                parkingSlots[i] = car.getLicensePlate();
+
+                parkedCars.put(i, car);
+                System.out.println("Car parked at slot: " + i);
+            
+                return;
+            }
+        }
+        System.out.println("Parking is full!");
+    }
+
+    public void releaseParkingSpace(String licensePlate){
+        for(int i=0; i<parkingSlots.length; i++){
+            if(parkingSlots[i] != null && parkingSlots[i].equalsIgnoreCase(licensePlate)){
+                parkingSlots[i] = null;
+                parkedCars.remove(i);
+                System.out.println("Parking slot released..!");
+                return;
+            }
+        }
+        System.out.println("Car not found..!");
+    }
+
+    public void saveData(){
+        try{
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("cars.bin"));
+            oos.writeObject(parkedCars);
+            oos.close();
+            System.out.println("Data saved successfully");
+        }
+        catch(IOException e){
+            System.out.println("Error saving file: " + e.getMessage());
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private Map<Integer, Car> loadData(){
         try {
-            ObjectInputStream ois = new ObjectInputStream(FileInputStream("cars.bin"));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("cars.bin"));
 
             Map<Integer, Car> map = (HashMap<Integer, Car>) ois.readObject();
             ois.close();
